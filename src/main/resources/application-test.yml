@@ -1,0 +1,17 @@
+#Database Configuration
+spring:
+ profile: test
+
+
+ datasource:
+   url: jdbc:postgresql://localhost:9876/csmarttest
+   username: csmartuser
+   password: csmartuser
+#   schema: ci
+
+#flyway:
+#  url: jdbc:postgresql://localhost:9876/csmarttest
+#  user: flywayuser
+#  password: flywayuser
+#  schemas: ci
+

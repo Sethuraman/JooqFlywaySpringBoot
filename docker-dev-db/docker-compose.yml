@@ -1,0 +1,27 @@
+---
+version: '2'
+services:
+  postgres-ci:
+    build:
+      context: .
+      dockerfile: CI-Dockerfile
+    image: csmart:ci
+    ports:
+      - "7654:5432"
+    restart: always
+  postgres-etoe:
+    build:
+      context: .
+      dockerfile: EToE-Dockerfile
+    image: csmart:etoe
+    ports:
+      - "8765:5432"
+    restart: always
+  postgres-test:
+    build:
+      context: .
+      dockerfile: Test-Dockerfile
+    image: csmart:test
+    ports:
+      - "9876:5432"
+    restart: always

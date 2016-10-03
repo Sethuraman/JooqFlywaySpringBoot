@@ -1,0 +1,15 @@
+#Database Configuration
+spring:
+  profiles: ci
+
+  datasource:
+    url: jdbc:postgresql://localhost:7654/csmartci
+    username: csmartuser
+    password: csmartuser
+
+
+#flyway:
+# url: jdbc:postgresql://localhost:7654/csmartci
+# user: flywayuser
+# password: flywayuser
+

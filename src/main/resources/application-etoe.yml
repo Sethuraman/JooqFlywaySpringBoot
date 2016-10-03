@@ -1,0 +1,15 @@
+#Database Configuration
+spring:
+  profiles: etoe
+
+  datasource:
+    url: jdbc:postgresql://localhost:8765/csmartetoe
+    username: csmartuser
+    password: csmartuser
+
+
+#flyway:
+# url: jdbc:postgresql://localhost:8765/csmartetoe
+# user: flywayuser
+# password: flywayuser
+

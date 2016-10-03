@@ -1,0 +1,99 @@
+import groovy.xml.MarkupBuilder
+
+buildscript {
+	ext {
+		springBootVersion = '1.4.1.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+		maven {
+			url "https://plugins.gradle.org/m2/"
+		}
+	}
+	dependencies {
+		classpath 'org.jooq:jooq-codegen:3.6.1'
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath 'org.flywaydb:flyway-core:3.2.1'
+		classpath 'org.postgresql:postgresql:9.4.1211.jre7'
+	}
+}
+
+import org.flywaydb.core.Flyway
+
+
+group 'in.co.csmart'
+version '1.0.0'
+
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'spring-boot'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+}
+
+configurations {
+	compile.extendsFrom generatedCompile
+}
+
+sourceSets {
+	generated
+	main {
+		compileClasspath += generated.output
+	}
+}
+
+dependencies {
+	generatedCompile 'org.jooq:jooq:3.6.1',
+			'org.jooq:jooq-meta:3.6.1',
+			'org.jooq:jooq-codegen:3.6.1'
+
+	compile('org.springframework.boot:spring-boot-starter-jooq')
+	compile('org.springframework.boot:spring-boot-starter-security')
+	compile('org.springframework.boot:spring-boot-starter-web')
+	compile('org.flywaydb:flyway-core:3.2.1')
+	compile('org.postgresql:postgresql:9.4.1211.jre7')
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+def writer = new StringWriter()
+new MarkupBuilder(writer)
+		.configuration('xmlns': 'http://www.jooq.org/xsd/jooq-codegen-3.6.0.xsd') {
+	jdbc() {
+		driver('org.postgresql.Driver')
+		url("jdbc:postgresql://localhost:7654/csmart")
+		user('csmartapi')
+		password('csmartapi')
+	}
+	generator() {
+		database() {
+		}
+		generate() {
+		}
+		target() {
+			packageName('csmart.db.gen')
+			directory('src/main/generated/java')
+		}
+	}
+}
+
+
+task generateJOOQ() {
+	doLast {
+		def Flyway flyway = new Flyway();
+		flyway.setDataSource("jdbc:postgresql://localhost:7654/csmart", "csmartapi", "csmartapi");
+		flyway.setLocations("filesystem:${project.projectDir}/src/main/resources/db/migration")
+		flyway.migrate();
+		org.jooq.util.GenerationTool.generate(
+				javax.xml.bind.JAXB.unmarshal(new StringReader(writer.toString()), org.jooq.util.jaxb.Configuration.class)
+		)
+	}
+}
+
+compileGeneratedJava.dependsOn clean
+compileGeneratedJava.dependsOn generateJOOQ
+compileJava.dependsOn compileGeneratedJava
