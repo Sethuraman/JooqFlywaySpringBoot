@@ -20,8 +20,8 @@ public class UserRepo {
     private DSLContext dsl;
 
     public void createUser(User user){
-        dsl.insertInto(USERS,
-                USERS.EMAILID, USERS.PASSWORD_HASH, USERS.ADDRESS, USERS.PRACTICE_NAME, USERS.PRIMARY_USER)
+        dsl.insertInto(USERS)
+            .columns(USERS.EMAILID, USERS.PASSWORD_HASH, USERS.ADDRESS, USERS.PRACTICE_NAME, USERS.PRIMARY_USER)
             .values(user.getEmailid(),
                     user.getPassword(),
                     user.getAddress().toJsonNode(),
@@ -31,10 +31,12 @@ public class UserRepo {
     }
 
     public User getUser(String email){
-        UsersRecord user = dsl.select()
+        UsersRecord user =
+            dsl.select()
                 .from(USERS)
                 .where(USERS.EMAILID.eq(email))
-            .fetchOne().into(UsersRecord.class);
+            .fetchOne()
+                .into(UsersRecord.class);
 
         return new User(user);
     }

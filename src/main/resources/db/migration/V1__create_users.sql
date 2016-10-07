@@ -7,3 +7,8 @@ create table users (
     practice_name varchar(500),
     primary_user boolean
 );
+create table orders (
+    order_id VARCHAR(36) not null PRIMARY KEY,
+    emailid VARCHAR(250),
+    .....
+)

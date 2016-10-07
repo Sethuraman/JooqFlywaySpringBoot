@@ -39,16 +39,8 @@ public class PersistenceContext {
 
     public DefaultConfiguration configuration() {
         DefaultConfiguration jooqConfiguration = new DefaultConfiguration();
-
         jooqConfiguration.set(connectionProvider());
-//        jooqConfiguration.set(SQLDialect.POSTGRES_9_5);
         jooqConfiguration.set(new DefaultExecuteListenerProvider(jooqToSpringExceptionTransformer()));
-//        Settings settings = new Settings()
-//                .withRenderMapping(new RenderMapping()
-//                        .withSchemata(
-//                                new MappedSchema().withInput("ci")
-//                                        .withOutput(activeProfile)));
-//        jooqConfiguration.setSettings(settings);
         return jooqConfiguration;
     }
 

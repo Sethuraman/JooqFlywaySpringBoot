@@ -24,6 +24,15 @@ public class UserRepoTest {
 
     @Test
     public void shouldInsertUserInDb(){
+        User user = createUser();
+
+        userRepo.createUser(user);
+        User returnedUsed = userRepo.getUser("email");
+
+        Assert.assertEquals(returnedUsed.getPassword(), user.getPassword());
+    }
+
+    private User createUser() {
         User user = new User();
         user.setEmailid("email");
         user.setPassword("password");
@@ -36,9 +45,6 @@ public class UserRepoTest {
         address.setPincode("pincode");
         address.setState("state");
         user.setAddress(address);
-        userRepo.createUser(user);
-
-        User returnedUsed = userRepo.getUser("email");
-        Assert.assertEquals(returnedUsed.getPassword(), user.getPassword());
+        return user;
     }
 }

@@ -1,10 +1,5 @@
-#Database Configuration
-
-
 server:
  port: 9090
-
-
 
 security:
  basic:
